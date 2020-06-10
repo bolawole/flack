@@ -1,0 +1,16 @@
+{%extends "layout.html"%}
+
+{%block body%}
+<div class="cont">
+    <div>
+    <h1>Want to Keep Up with your team?</h1>
+    <h4>Create a user name to get started</h4>
+    <div class="a">
+    <a id="btn" href="{{url_for('create')}}"><i class="fas fa-plus"></i> Create a buddy room</a>
+    <small >Do you have an ID already? <a href="{{url_for('find')}}">+ Sign in</a></small>
+</div>
+
+</div>
+</div>
+
+{%endblock%}

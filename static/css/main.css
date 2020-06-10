@@ -1,0 +1,185 @@
+:root{
+    --color:#4a154b;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+
+}
+
+body{
+    background-color: var(--color);
+   
+    
+}
+
+.cont{
+    background-color: var(--color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+   
+}
+.cont > div{
+    text-align: center;
+    background-color: white;
+    height: 300px;
+    padding: 40px;
+    margin: 40px;
+    border-radius: 20%;
+    color: var(--color);
+}
+.a{
+    margin-top: 50px;
+}
+#btn{
+    margin-top: 20px;
+    border: var(--color) 2px solid ;
+    padding: 10px;
+    border-radius: 20px;
+    text-decoration: none;
+}
+li{
+    list-style: none;
+}
+
+.container{
+   
+    height: 100vh;
+   color: white;
+   width: 100%;
+}
+.content-section{
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;  
+   color: white;
+   width: 100%;
+   height: 100vh;
+}
+
+.col-sm-3, .col-lg-3, .col-xs-3{
+    background-color: white;
+    height: 100vh;
+}
+.first-row{
+    color: var(--color) ;
+}
+.fa-triangle{
+    transform: rotate(90deg);
+}
+#triangle{
+    font-size: 8px;
+}
+.change{
+    transform: rotate(180deg);
+}
+
+#bottom #bt-list{
+    display: flex;
+    justify-content: space-between;
+    margin: 30px;
+    align-items: center;
+}
+.modal-bg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.1);
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s;
+}
+.bg-active{
+    visibility: visible;
+    opacity: 1;
+}
+.modal-child{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    position: fixed;
+    top: 100px;
+    left: 200px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 10px;
+    justify-content: space-around;
+    height: 100px;
+}
+#modal-button button{
+    background: none;
+    outline: none;
+    border: none;
+}
+.modal-child button{
+    background: none;
+    outline: none;
+    border: none;
+}
+.modal-child button:hover{
+    background: var(--color);
+    width: 100%;
+    padding: 2px;
+    color: white;
+    font-weight: bold;
+   
+    
+}
+.channel-modal{
+    width: 50%;
+    background-color: white;
+    height: auto;
+    color: black;
+    font-weight: bold;
+    padding-bottom: 30px;
+    margin-top: 10%;
+   box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.4),0 5px 8px 0 rgba(179, 174, 174, 0.4);
+   border-radius: 20px;
+   font-family: 'Montserrat', sans-serif; 
+  
+}
+.channel-overlay{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left:0;
+    /* display: none; */
+
+}
+.channel-active{
+    display: none;
+   
+}
+#channel-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#close-button{
+padding: 5px;
+border: none;
+outline: none;
+cursor: pointer;
+background: none;
+font-size: 40px;
+
+
+}
+#channel-list{
+    
+}
