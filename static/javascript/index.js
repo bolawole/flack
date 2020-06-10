@@ -60,25 +60,27 @@ for(i=0; i<channel_list.length; i++){
   document.getElementById("channel-list").append(child_list);
 }
 }
-document.querySelectorAll(".nav-link").forEach(link => {
+
+document.querySelectorAll(".nav-link").forEach(function(link){
   link.onclick=()=>{
-     console.log("you clicked on " + link.innerHTML);
-     loadpage();
+     console.log("you clicked on " + `${link.innerHTML}`);
+      const request=new XMLHttpRequest();
+      request.open('GET','/chat');
+      request.onload=()=>{
+         
+            document.getElementById("chat").innerHTML=request.responseText;
+           
+      };
+      request.send();
+      
+
      return false;
   } 
 });
 
 
-function loadpage(){
-const request=new XMLHttpRequest();
-request.open('GET','/chat');
-request.onload=()=>{
-const response=request.responseXML;
-document.getElementById("chat").innerHTML=response;
-}
 
 
-}
 
 
 
