@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask,render_template,request,redirect,url_for,flash
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit,send
 from forms import SignUpForm
 
 app = Flask(__name__)
@@ -48,6 +48,7 @@ def active():
     return render_template("buddyroom.html",)
 
 @socketio.on('message')
-def handlemessage(msg):
-    print('message ' + msg)
-    emit(msg, broadcast=True)
+def message(msg):
+    print(f"\n\n{msg}\n\n")
+    send(msg)
+    emit('a_message',f"{msg} + emmitted ")

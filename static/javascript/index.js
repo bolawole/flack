@@ -1,4 +1,6 @@
 
+document.addEventListener('DOMContentLoaded',()=>{
+
 const triangle=document.getElementById("triangle");
 const m_button=document.getElementById("modal-button");
 const modalbg=document.querySelector(".modal-bg");
@@ -78,20 +80,35 @@ document.querySelectorAll(".nav-link").forEach(function(link){
   } 
 });
 
-socket.on('connect',()=>{
-document.getElementById("send-buttn").onclick=()=>{
-   socket.emit("user has connected");
-// const message=document.getElementById("message-inout").value;
-// socket.emit(message);
 
-};
+socket.on('connect',()=>{
+   socket.send("User Connected");
+   });
+
+socket.on('message',data=>{
+   console.log(`message received: ${data}`);
+ 
+})
+socket.on('a_message',data=>{
+   console.log(`message received: ${data}`);
+ 
+})   
+// });
+// socket.on('message',()=>{
+//    document.getElementById("send-button").onclick= ()=>{
+//    const message=document.getElementById("message-input").value;
+//    socket.emit('submit msg',{'message':message});
+//    };
+   
+// });
+
+// socket.on('annouce message',msg=>{
+//    const li=document.createElement('li');
+//    li.innerHTML=
+// })
+
+
+
+
 
 });
-
-
-
-
-
-
-
-
