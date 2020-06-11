@@ -5,8 +5,8 @@ const modalbg=document.querySelector(".modal-bg");
 const channeloverlay=document.querySelector(".channel-overlay");
 const createchannel=document.getElementById("create-channel");
 var channel_list,arr_of_channellist=[];
-
-
+var socket=io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+console.log(location.protocol + '//' + document.domain + ':' + location.port);
 // localStorage.removeItem("channellist");
 triangle.addEventListener('click',function(){
 triangle.classList.toggle("change");
@@ -78,6 +78,15 @@ document.querySelectorAll(".nav-link").forEach(function(link){
   } 
 });
 
+socket.on('connect',()=>{
+document.getElementById("send-buttn").onclick=()=>{
+   socket.emit("user has connected");
+// const message=document.getElementById("message-inout").value;
+// socket.emit(message);
+
+};
+
+});
 
 
 

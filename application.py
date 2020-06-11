@@ -46,3 +46,8 @@ def chat():
 def active():
     print(room_user)
     return render_template("buddyroom.html",)
+
+@socketio.on('message')
+def handlemessage(msg):
+    print('message ' + msg)
+    emit(msg, broadcast=True)

@@ -183,3 +183,11 @@ font-size: 40px;
 #channel-list{
     
 }
+#message-container{
+    height: 90vh;
+    width: 100%;
+}
+
+input[type=text]{
+color: black;
+}
