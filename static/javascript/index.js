@@ -8,7 +8,7 @@ const channeloverlay=document.querySelector(".channel-overlay");
 const createchannel=document.getElementById("create-channel");
 var channel_list,arr_of_channellist=[];
 var socket=io.connect(location.protocol + '//' + document.domain + ':' + location.port);
-console.log(location.protocol + '//' + document.domain + ':' + location.port);
+
 // localStorage.removeItem("channellist");
 triangle.addEventListener('click',function(){
 triangle.classList.toggle("change");
@@ -16,7 +16,7 @@ triangle.classList.toggle("change");
 
 
 m_button.addEventListener('click',()=>{
-   modalbg.classList.add("bg-active");
+   modalbg.classList.add("bg-active"); 
 })
 modalbg.addEventListener('click',()=>{
 modalbg.classList.remove("bg-active");
@@ -63,23 +63,26 @@ for(i=0; i<channel_list.length; i++){
 }
 }
 
-document.querySelectorAll(".nav-link").forEach(function(link){
-  link.onclick=()=>{
-     console.log("you clicked on " + `${link.innerHTML}`);
-      const request=new XMLHttpRequest();
-      request.open('GET','/chat');
-      request.onload=()=>{
+// document.querySelectorAll(".nav-link").forEach(function(link){
+//   link.onclick=()=>{
+//      console.log("you clicked on " + `${link.innerHTML}`);
+//       const request=new XMLHttpRequest();
+//       request.open('GET','/chat');
+//       request.onload=()=>{
          
-            document.getElementById("chat").innerHTML=request.responseText;
+//             document.getElementById("chat").innerHTML=request.responseText;
            
-      };
-      request.send();
+//       };
+//       request.send();
       
 
-     return false;
-  } 
-});
-
+//      return false;
+//   } 
+// });
+document.getElementById("send-button").onclick=()=>{
+const message=document.getElementById("message-input").value;
+socket.send(message);
+}
 
 socket.on('connect',()=>{
    socket.send("User Connected");
@@ -87,12 +90,13 @@ socket.on('connect',()=>{
 
 socket.on('message',data=>{
    console.log(`message received: ${data}`);
+  var p= document.createElement('p');
+  var br=document.createElement('br');
+  p.innerHTML=data;
+  document.getElementById("message-container").append(p);
  
 })
-socket.on('a_message',data=>{
-   console.log(`message received: ${data}`);
- 
-})   
+
 // });
 // socket.on('message',()=>{
 //    document.getElementById("send-button").onclick= ()=>{

@@ -11,6 +11,7 @@ socketio = SocketIO(app)
 cridentials=['dewole','dewoleawe@gmail.com','password']
 room_user=[]
 g_name=""
+
 @app.route("/")
 def index():
     return render_template("home.html")
@@ -30,25 +31,27 @@ def create():
             return render_template("create.html", form=form)
         else:
             room_user.append(name)
+        
             return render_template("buddyroom.html",name=name)
                     
 
     
     return render_template("create.html", form=form)
 
-@app.route('/chat',methods=["POST","GET"])
-def chat():
-    return render_template("find.html")
+# @app.route('/chat',methods=["POST","GET"])
+# def chat():
+#     return render_template("find.html")
 
 
 
 @app.route("/active",methods=["POST","GET"])
 def active():
+ 
     print(room_user)
-    return render_template("buddyroom.html",)
+    return render_template("buddyroom.html")
 
 @socketio.on('message')
 def message(msg):
     print(f"\n\n{msg}\n\n")
-    send(msg)
-    emit('a_message',f"{msg} + emmitted ")
+    send(msg,broadcast=True)
+  
