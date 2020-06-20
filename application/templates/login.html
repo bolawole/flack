@@ -3,29 +3,31 @@
 {%block body%}
 <div class=" container">
    
-    <h3>Create A Display Name</h3>
+    <h3>Login to your space</h3>
     <div class="content-section">
     <form method="POST" action="">
         {{form.hidden_tag()}}
        <div class="form-group">
            {{form.name.label(class="form-control-label")}}
+            {%if form.name.errors%}
+            {{form.name(class="form-control form-control-lg is-invalid" ,id="form_name")}}
+            <div class="invalid-feedback">
+                {%for error in form.name.errors%}
+                  <span>{{error}}</span>
+                {%endfor%}
+             </div>
+            {%else%}
            {{form.name(class="form-control form-control-lg" ,id="form_name")}}
+           {%endif%}
        </div>  
-       <small>
-        {% with messages=get_flashed_messages(with_categories=true) %}
-        {%if messages%}
-        {%for category,message in messages%}
-        <div class="alert alert-{{category}}">
-          {{message}}  <p><a id="log-in" href="{{url_for('active')}}">+log in</a></p>
-        </div>
-        {%endfor%}
-        {%endif%}
-        {%endwith%}
-      </small> 
+       <small>    
     <div class="form-group">
        {{form.submit(class="btn btn-outline-info")}}
     </div> 
        </form>
        </div>
 </div>
+
+
+
 {%endblock%}
