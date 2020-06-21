@@ -40,6 +40,10 @@
 
 
 <div id="chat" class="chat-room col-xs-7 col-sm-9 col-lg-9">
+    <div id="chat-tag">
+
+        
+    </div>
     <div id="message-container">
          
 
@@ -85,6 +89,10 @@
 
 </div>
 </div>
+<!-- get username -->
+<script type="text/javascript">
+const username=`{{name|e}}`; 
+</script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
 <script src="{{url_for('static',filename='javascript/index.js')}} " ></script>
 {%endblock%}

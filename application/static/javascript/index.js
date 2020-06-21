@@ -1,6 +1,5 @@
 
 document.addEventListener('DOMContentLoaded',()=>{
-
 const triangle=document.getElementById("triangle");
 const m_button=document.getElementById("modal-button");
 const modalbg=document.querySelector(".modal-bg");
@@ -8,8 +7,8 @@ const channeloverlay=document.querySelector(".channel-overlay");
 const createchannel=document.getElementById("create-channel");
 var channel_list,arr_of_channellist=[];
 var socket=io.connect(location.protocol + '//' + document.domain + ':' + location.port);
-
-// localStorage.removeItem("channellist");
+var room;
+//localStorage.removeItem("channellist");
 triangle.addEventListener('click',function(){
 triangle.classList.toggle("change");
 })
@@ -30,8 +29,8 @@ close_button.addEventListener('click',()=>{
 })
 document.getElementById("new-channel").onsubmit = ()=>{
    const li=document.createElement('li');
-   const a =document.createElement('a');
-   a.setAttribute('href',"");
+   const a =document.createElement('p');
+   // a.setAttribute('href',"");
    a.setAttribute('class',"nav-link");
    a.setAttribute('data-page',`${document.getElementById("channel-name").value}`)
    a.innerHTML=document.getElementById("channel-name").value;
@@ -60,59 +59,75 @@ for(i=0; i<channel_list.length; i++){
   child_list.innerHTML=channel_list[i];
   arr_of_channellist.push(child_list.innerHTML);
   document.getElementById("channel-list").append(child_list);
+
 }
 }
 
-// document.querySelectorAll(".nav-link").forEach(function(link){
-//   link.onclick=()=>{
-//      console.log("you clicked on " + `${link.innerHTML}`);
-//       const request=new XMLHttpRequest();
-//       request.open('GET','/chat');
-//       request.onload=()=>{
+document.querySelectorAll(".nav-link").forEach(function(link){
+  link.onclick=()=>{
+     console.log("you clicked on " + `${link.innerHTML}`);
+      const request=new XMLHttpRequest();
+      request.open('GET','/chat');
+      request.onload=()=>{
          
-//             document.getElementById("chat").innerHTML=request.responseText;
+            document.getElementById("message-container").innerHTML=request.responseText;
            
-//       };
-//       request.send();
+      };
+      request.send();
       
 
-//      return false;
-//   } 
-// });
+     return false;
+  } 
+});
 document.getElementById("send-button").onclick=()=>{
 const message=document.getElementById("message-input").value;
-socket.send(message);
+socket.send({'msg': message,'username':username,'room':room});
 }
-
-socket.on('connect',()=>{
-   socket.send("User Connected");
-   });
-
 socket.on('message',data=>{
    console.log(`message received: ${data}`);
   var p= document.createElement('p');
   var br=document.createElement('br');
-  p.innerHTML=data;
+  var span_username=document.createElement('span');
+  var span_timestamp=document.createElement('span');
+  span_username.innerHTML=data.username;
+  span_timestamp.innerHTML=data.timestamp;
+  p.innerHTML=data.msg+br.outerHTML+span_username.outerHTML + span_timestamp.outerHTML;
   document.getElementById("message-container").append(p);
  
 })
 
-// });
-// socket.on('message',()=>{
-//    document.getElementById("send-button").onclick= ()=>{
-//    const message=document.getElementById("message-input").value;
-//    socket.emit('submit msg',{'message':message});
-//    };
-   
-// });
+document.querySelectorAll('.nav-link').forEach(p=>{
+p.onclick=()=>{
+   let newRoom=p.innerHTML;
+   if(newRoom==room){
+      msg=`you are already in this room.`
+      printSysMsg(msg);
+   }
+   else{
+      leaveRoom(room);
+      joinRoom(newRoom);
+      room=newRoom;
+   }
+}
 
-// socket.on('annouce message',msg=>{
-//    const li=document.createElement('li');
-//    li.innerHTML=
-// })
+})
 
+//leave room
+function leaveRoom(room){
+socket.emit('leave',{'username': username,'room':room});
+}
 
+//join room
+function joinRoom(room){
+socket.emit('join',{'username':username,'room':room});
+document.getElementById('message-container').innerHTML="";
+}
 
-
-
+//print system message
+function  printSysMsg(msg){
+const p=document.createElement('p');
+p.innerHTML=msg;
+document.getElementById('message-container').append(p);
+}
 });
+ 
