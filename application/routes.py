@@ -52,9 +52,9 @@ def message(msg):
     send({'msg':msg['msg'],'username':msg['username'],'timestamp':strftime(f'%b-%d %I:%M%p',localtime())},room=msg['room'])
 
 
-@app.route("/chat",methods=["POST","GET"])
-def chat():
-    return "THIS IS THE CHAT HANDLER"
+# @app.route("/chat",methods=["POST","GET"])
+# def chat():
+#     return "THIS IS THE CHAT HANDLER"
 
 
 @socketio.on('join')

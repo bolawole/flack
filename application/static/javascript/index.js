@@ -86,6 +86,7 @@ socket.send({'msg': message,'username':username,'room':room});
 socket.on('message',data=>{
    console.log(`message received: ${data}`);
   var p= document.createElement('p');
+  p.setAttribute("class","message");
   var br=document.createElement('br');
   var span_username=document.createElement('span');
   var span_timestamp=document.createElement('span');
@@ -98,15 +99,18 @@ socket.on('message',data=>{
 
 document.querySelectorAll('.nav-link').forEach(p=>{
 p.onclick=()=>{
+
    let newRoom=p.innerHTML;
    if(newRoom==room){
       msg=`you are already in this room.`
       printSysMsg(msg);
    }
    else{
+
       leaveRoom(room);
       joinRoom(newRoom);
       room=newRoom;
+      document.getElementById("chat-tag").innerHTML=newRoom;
    }
 }
 
