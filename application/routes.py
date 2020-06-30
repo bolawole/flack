@@ -43,9 +43,10 @@ def login():
 
 @app.route("/active",methods=["POST","GET"])
 def active():
-    print(f"\n\n{current_user.username}\n\n")
-    return render_template("buddyroom.html",name=current_user.username)
-
+    try:
+        return render_template("buddyroom.html",name=current_user.username)
+    except AttributeError:
+        return "404! Error Seems Your are not authorised to access this page"
 @socketio.on('message')
 def message(msg):
     print(f"\n\n{msg}\n\n")
@@ -61,10 +62,10 @@ def message(msg):
 def join(data):
    print(f"\n\n{data['room']}\n\n")
    join_room(data['room'])
-   send({'msg': data['username']+" has join the " +data['room']+" room"},room=data['room']) 
+   emit('join',{'msg': data['username']+" has join the " +data['room']+" room"},room=data['room']) 
 
 
 @socketio.on('leave')
 def join(data):
    leave_room(data['room'])
-   send({'msg': data['username']+" has left " +data['room']+" room."},room=data['room']) 
+   emit('join',{'msg': data['username']+" has left " +data['room']+" room."},room=data['room']) 

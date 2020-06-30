@@ -83,18 +83,30 @@ document.getElementById("send-button").onclick=()=>{
 const message=document.getElementById("message-input").value;
 socket.send({'msg': message,'username':username,'room':room});
 }
+socket.on('join',data=>{
+   console.log(data.msg);
+   document.getElementById("userstatus").innerHTML=`<p>${data.msg}</p>`
+   
+   
+})
 socket.on('message',data=>{
    console.log(`message received: ${data}`);
+   document.getElementById("message-input").value="";
   var p= document.createElement('p');
   p.setAttribute("class","message");
   var br=document.createElement('br');
   var span_username=document.createElement('span');
+  span_username.setAttribute("id","span_username");
   var span_timestamp=document.createElement('span');
-  span_username.innerHTML=data.username;
-  span_timestamp.innerHTML=data.timestamp;
-  p.innerHTML=data.msg+br.outerHTML+span_username.outerHTML + span_timestamp.outerHTML;
+  if (typeof data.timestamp === 'undefined' || typeof data.username==='undefined')
+  { p.innerHTML=data.msg+br.outerHTML;
+   document.getElementById("message-container").append(p);}
+  else{
+  span_username.innerHTML=" " +data.username;
+  span_timestamp.innerHTML=" " +data.timestamp;
+  p.innerHTML=span_username.outerHTML+ br.outerHTML+ data.msg+br.outerHTML + span_timestamp.outerHTML;
   document.getElementById("message-container").append(p);
- 
+  }
 })
 
 document.querySelectorAll('.nav-link').forEach(p=>{
