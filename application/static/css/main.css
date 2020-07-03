@@ -235,10 +235,13 @@ font-size: 40px;
     border-radius: 10%;
 }
 
-/* #message-container{
-    height: 90vh;
+#message-container{
+    height: 320px;
     width: 100%;
-} */
+    overflow: scroll;
+    overflow-x: hidden;
+    padding: 5px;
+} 
 
 input[type=text]{
 color: black;
@@ -295,6 +298,7 @@ margin: 50px 0px;
     font-style: italic;
 }
 #userstatus{
+    text-align: center;
     font-size: 10px;
     font-style: italic;
     font-family: 'Montserrat', sans-serif;

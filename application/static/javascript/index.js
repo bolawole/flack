@@ -63,22 +63,6 @@ for(i=0; i<channel_list.length; i++){
 }
 }
 
-document.querySelectorAll(".nav-link").forEach(function(link){
-  link.onclick=()=>{
-     console.log("you clicked on " + `${link.innerHTML}`);
-      const request=new XMLHttpRequest();
-      request.open('GET','/chat');
-      request.onload=()=>{
-         
-            document.getElementById("message-container").innerHTML=request.responseText;
-           
-      };
-      request.send();
-      
-
-     return false;
-  } 
-});
 document.getElementById("send-button").onclick=()=>{
 const message=document.getElementById("message-input").value;
 socket.send({'msg': message,'username':username,'room':room});
@@ -105,14 +89,14 @@ socket.on('message',data=>{
   span_username.innerHTML=" " +data.username;
   span_timestamp.innerHTML=" " +data.timestamp;
   p.innerHTML=span_username.outerHTML+ br.outerHTML+ data.msg+br.outerHTML + span_timestamp.outerHTML;
-  document.getElementById("message-container").append(p);
+  document.getElementById("message-container").append(p); 
   }
 })
 
 document.querySelectorAll('.nav-link').forEach(p=>{
 p.onclick=()=>{
-
    let newRoom=p.innerHTML;
+   console.log(p.dataset.page);
    if(newRoom==room){
       msg=`you are already in this room.`
       printSysMsg(msg);
@@ -120,13 +104,16 @@ p.onclick=()=>{
    else{
 
       leaveRoom(room);
+      document.title=username+'-'+p.innerHTML;
+      history.pushState({'title': p.dataset.page,'text': document.getElementById("chat").innerHTML},p.innerHTML,p.innerHTML);
       joinRoom(newRoom);
       room=newRoom;
       document.getElementById("chat-tag").innerHTML=newRoom;
    }
 }
 
-})
+})   
+
 
 //leave room
 function leaveRoom(room){
@@ -145,5 +132,33 @@ const p=document.createElement('p');
 p.innerHTML=msg;
 document.getElementById('message-container').append(p);
 }
+
+var scrollwindow=document.getElementById("message-container");
+
+scrollwindow.onscroll=()=>{
+   console.log(scrollwindow.clientHeight);
+   console.log(scrollwindow.scrollHeight);
+   console.log(Math.floor(scrollwindow.scrollTop));
+}
+
+window.onpopstate=e=>{
+   try
+{
+const data=e.state;
+document.title=data.title;
+document.getElementById("chat").innerHTML=data.text;
+}
+catch(err){
+   if (err instanceof TypeError){
+      const request=new XMLHttpRequest();
+      request.open('GET',"/active");
+      request.onload=()=>{
+         const response=request.responseText;
+         document.querySelector('body').innerHTML=response;
+      }
+      request.send();
+   }
+}
+}
 });
- 
+
