@@ -9,6 +9,19 @@ var channel_list,arr_of_channellist=[];
 var socket=io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 var room;
 //localStorage.removeItem("channellist");
+window.onpopstate=e=>{
+   try {
+const data=e.state;
+console.log(data.title);
+document.title=username+'-'+data.title;
+document.getElementById("upperchat-layer").innerHTML=data.text;
+}
+catch(err){
+   if (err instanceof TypeError){
+     document.title=username;
+   }
+}
+}
 triangle.addEventListener('click',function(){
 triangle.classList.toggle("change");
 })
@@ -54,13 +67,13 @@ if(channel_list==undefined || channel_list.length<0){
 }
 if(channel_list!=undefined)
 {
-for(i=0; i<channel_list.length; i++){
-  var child_list=document.createElement('li');
-  child_list.innerHTML=channel_list[i];
-  arr_of_channellist.push(child_list.innerHTML);
-  document.getElementById("channel-list").append(child_list);
-
-}
+   for(i=0; i<channel_list.length; i++){
+      var child_list=document.createElement('li');
+      child_list.innerHTML=channel_list[i];
+      arr_of_channellist.push(child_list.innerHTML);
+      document.getElementById("channel-list").append(child_list);
+    
+    }
 }
 
 document.getElementById("send-button").onclick=()=>{
@@ -68,7 +81,6 @@ const message=document.getElementById("message-input").value;
 socket.send({'msg': message,'username':username,'room':room});
 }
 socket.on('join',data=>{
-   console.log(data.msg);
    document.getElementById("userstatus").innerHTML=`<p>${data.msg}</p>`
    
    
@@ -96,16 +108,15 @@ socket.on('message',data=>{
 document.querySelectorAll('.nav-link').forEach(p=>{
 p.onclick=()=>{
    let newRoom=p.innerHTML;
-   console.log(p.dataset.page);
+
    if(newRoom==room){
       msg=`you are already in this room.`
       printSysMsg(msg);
    }
    else{
-
-      leaveRoom(room);
       document.title=username+'-'+p.innerHTML;
-      history.pushState({'title': p.dataset.page,'text': document.getElementById("chat").innerHTML},p.innerHTML,p.innerHTML);
+      loadpage(p.innerHTML);
+      leaveRoom(room);
       joinRoom(newRoom);
       room=newRoom;
       document.getElementById("chat-tag").innerHTML=newRoom;
@@ -123,7 +134,7 @@ socket.emit('leave',{'username': username,'room':room});
 //join room
 function joinRoom(room){
 socket.emit('join',{'username':username,'room':room});
-document.getElementById('message-container').innerHTML="";
+// document.getElementById('message-container').innerHTML="";
 }
 
 //print system message
@@ -141,24 +152,19 @@ scrollwindow.onscroll=()=>{
    console.log(Math.floor(scrollwindow.scrollTop));
 }
 
-window.onpopstate=e=>{
-   try
-{
-const data=e.state;
-document.title=data.title;
-document.getElementById("chat").innerHTML=data.text;
-}
-catch(err){
-   if (err instanceof TypeError){
-      const request=new XMLHttpRequest();
-      request.open('GET',"/active");
-      request.onload=()=>{
-         const response=request.responseText;
-         document.querySelector('body').innerHTML=response;
-      }
-      request.send();
+
+ function loadpage(name){
+   const request=new XMLHttpRequest();
+   const state =`/active/${username}/${name}`;
+   console.log(state);
+   request.open('GET',`/active/${username}/${name}`);
+   request.onload=()=>{
+      const response=request.responseText;
+      document.getElementById('upperchat-layer').innerHTML=response;
+      history.pushState({'title': name,'text': response},name,state);
+
    }
-}
-}
-});
+   request.send();
+ }
+ });
 

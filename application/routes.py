@@ -38,15 +38,16 @@ def login():
             flash("Login Unsuccessful","danger")
     return render_template("login.html", form=form)
 
-
-
+@app.route("/active/<string:username>/<string:room>")
+def chat(username,room):
+    return render_template("chat.html")
 
 @app.route("/active",methods=["POST","GET"])
 def active():
     try:
         return render_template("buddyroom.html",name=current_user.username)
     except AttributeError:
-        return "404! Error Seems Your are not authorised to access this page"
+        return "404! Error Seems You are not authorised to access this page"
 @socketio.on('message')
 def message(msg):
     print(f"\n\n{msg}\n\n")
