@@ -8,6 +8,7 @@ const createchannel=document.getElementById("create-channel");
 var channel_list,arr_of_channellist=[];
 var socket=io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 var room;
+var scrollwindow=document.getElementById("upperchat-layer");
 //localStorage.removeItem("channellist");
 window.onpopstate=e=>{
    try {
@@ -101,7 +102,30 @@ socket.on('message',data=>{
   span_username.innerHTML=" " +data.username;
   span_timestamp.innerHTML=" " +data.timestamp;
   p.innerHTML=span_username.outerHTML+ br.outerHTML+ data.msg+br.outerHTML + span_timestamp.outerHTML;
+  console.log(`${data.username}`);
+
+  //   if(data.username===username){
+//      document.querySelector(".message").style.backgroundColor="white";
+//   }
+//   document.querySelector(".message").style.backgroundColor="red";
   document.getElementById("message-container").append(p); 
+ 
+   if((scrollwindow.scrollHeight) > (scrollwindow.clientHeight))
+   {
+   scrollwindow.style.overflow="scroll";
+   scrollwindow.style.overflowX ="hidden";
+   }
+   else
+   scrollwindow.style.overflow="hidden";
+   scrollwindow.style.overflowX ="hidden";
+   
+   
+   
+      console.log(scrollwindow.clientHeight);
+      console.log(scrollwindow.scrollHeight);
+      console.log(Math.floor(scrollwindow.scrollTop));
+   
+   
   }
 })
 
@@ -114,12 +138,14 @@ p.onclick=()=>{
       printSysMsg(msg);
    }
    else{
+
       document.title=username+'-'+p.innerHTML;
       loadpage(p.innerHTML);
       leaveRoom(room);
       joinRoom(newRoom);
       room=newRoom;
-      document.getElementById("chat-tag").innerHTML=newRoom;
+      console.log(p.innerHTML);
+      document.getElementById("chat-tag").innerHTML=titleCase(p.innerHTML);
    }
 }
 
@@ -135,6 +161,7 @@ socket.emit('leave',{'username': username,'room':room});
 function joinRoom(room){
 socket.emit('join',{'username':username,'room':room});
 // document.getElementById('message-container').innerHTML="";
+scrollwindow.style.overflow="hidden";
 }
 
 //print system message
@@ -144,13 +171,9 @@ p.innerHTML=msg;
 document.getElementById('message-container').append(p);
 }
 
-var scrollwindow=document.getElementById("message-container");
 
-scrollwindow.onscroll=()=>{
-   console.log(scrollwindow.clientHeight);
-   console.log(scrollwindow.scrollHeight);
-   console.log(Math.floor(scrollwindow.scrollTop));
-}
+
+
 
 
  function loadpage(name){
@@ -165,6 +188,15 @@ scrollwindow.onscroll=()=>{
 
    }
    request.send();
+ }
+
+
+ function titleCase(str) {
+   str = str.toLowerCase().split(' ');
+   for (var i = 0; i < str.length; i++) {
+     str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1); 
+   }
+   return str.join(' ');
  }
  });
 
