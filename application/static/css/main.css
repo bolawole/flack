@@ -260,6 +260,16 @@ color: black;
     position: absolute; 
     border-radius: 10%;
     bottom:6px;
+    right: 90px;
+    border: none;
+    outline: none;
+    background: none;
+    color: orange;
+}
+#file-label{
+    position: absolute; 
+    border-radius: 10%;
+    bottom:1px;
     right: 70px;
     border: none;
     outline: none;
@@ -289,11 +299,24 @@ border-bottom: 1px solid white;
    color: var(--color); 
    padding: 15px;
    border-radius: 2px;
+   margin-left: 50%;
+}
+.receiver{
+    background-color: rgb(238,238,238);
+    color: var(--color); 
+    padding: 15px;
+    border-radius: 2px;
+    margin-right: 50%;
 }
 .message span{
     font-size: 7px;
     float: right;
 }
+.receiver span{
+    font-size: 7px;
+    float: right;
+}
+
 #span_username{
     float: left;
     font-style: italic;
@@ -304,4 +327,13 @@ border-bottom: 1px solid white;
     font-style: italic;
     font-family: 'Montserrat', sans-serif;
 
+}
+input[type="file"]{
+    display: none;
+}
+.chat-image{
+    margin:20px;
+    height: 50px;
+    width:50px;
+    cursor: pointer;
 }

@@ -70,3 +70,8 @@ def join(data):
 def join(data):
    leave_room(data['room'])
    emit('join',{'msg': data['username']+" has left " +data['room']+" room."},room=data['room']) 
+
+
+@socketio.on('image')
+def image(data):
+    emit('image',{'username':data['username'],"image":data["image"]})

@@ -9,6 +9,7 @@ var channel_list,arr_of_channellist=[];
 var socket=io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 var room;
 var scrollwindow=document.getElementById("upperchat-layer");
+var infile=document.getElementById("infile");
 //localStorage.removeItem("channellist");
 window.onpopstate=e=>{
    try {
@@ -87,43 +88,36 @@ socket.on('join',data=>{
    
 })
 socket.on('message',data=>{
-   console.log(`message received: ${data}`);
    document.getElementById("message-input").value="";
   var p= document.createElement('p');
-  p.setAttribute("class","message");
+//   p.setAttribute("class","message");
   var br=document.createElement('br');
   var span_username=document.createElement('span');
   span_username.setAttribute("id","span_username");
   var span_timestamp=document.createElement('span');
   if (typeof data.timestamp === 'undefined' || typeof data.username==='undefined')
   { p.innerHTML=data.msg+br.outerHTML;
-   document.getElementById("message-container").append(p);}
+   document.querySelectorAll(".message").append(p);}
   else{
   span_username.innerHTML=" " +data.username;
   span_timestamp.innerHTML=" " +data.timestamp;
   p.innerHTML=span_username.outerHTML+ br.outerHTML+ data.msg+br.outerHTML + span_timestamp.outerHTML;
-  console.log(`${data.username}`);
+ if (data.username!=username){
+   p.setAttribute("class","receiver");
+ }
+ else
+ {
+   p.setAttribute("class","message");
+ }
+
 
   //   if(data.username===username){
 //      document.querySelector(".message").style.backgroundColor="white";
 //   }
 //   document.querySelector(".message").style.backgroundColor="red";
   document.getElementById("message-container").append(p); 
- 
-   if((scrollwindow.scrollHeight) > (scrollwindow.clientHeight))
-   {
-   scrollwindow.style.overflow="scroll";
-   scrollwindow.style.overflowX ="hidden";
-   }
-   else
-   scrollwindow.style.overflow="hidden";
-   scrollwindow.style.overflowX ="hidden";
+ check_windowheight();
    
-   
-   
-      console.log(scrollwindow.clientHeight);
-      console.log(scrollwindow.scrollHeight);
-      console.log(Math.floor(scrollwindow.scrollTop));
    
    
   }
@@ -198,5 +192,44 @@ document.getElementById('message-container').append(p);
    }
    return str.join(' ');
  }
+
+infile.addEventListener('change',function(){
+const file=this.files[0];
+if (file){
+   const reader= new FileReader();
+
+   reader.addEventListener('load',function(){
+      socket.emit('image',{"username":username,"image":this.result});
+   })
+   reader.readAsDataURL(file)
+}
+})
+
+socket.on('image',msg=>{
+var img=document.createElement('img');
+img.setAttribute("class","chat-image");
+img.setAttribute("src",msg.image)
+document.getElementById('message-container').append(img);
+check_windowheight();
+
+})
+
+function check_windowheight(){
+   if((scrollwindow.scrollHeight) > (scrollwindow.clientHeight))
+   {
+   scrollwindow.style.overflow="scroll";
+   scrollwindow.style.overflowX ="hidden";
+   }
+   else
+   scrollwindow.style.overflow="hidden";
+   scrollwindow.style.overflowX ="hidden";
+   
+   
+   
+      console.log(scrollwindow.clientHeight);
+      console.log(scrollwindow.scrollHeight);
+      console.log(Math.floor(scrollwindow.scrollTop));
+}
+
  });
 
