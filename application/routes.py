@@ -74,4 +74,4 @@ def join(data):
 
 @socketio.on('image')
 def image(data):
-    emit('image',{'username':data['username'],"image":data["image"]})
+    emit('image',{'username':data['username'],"image":data["image"]},room=data["room"])

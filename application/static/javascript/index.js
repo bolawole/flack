@@ -199,17 +199,33 @@ if (file){
    const reader= new FileReader();
 
    reader.addEventListener('load',function(){
-      socket.emit('image',{"username":username,"image":this.result});
+      socket.emit('image',{"username":username,"image":this.result,'room':room});
    })
    reader.readAsDataURL(file)
 }
 })
 
 socket.on('image',msg=>{
+var div=document.createElement('div');
 var img=document.createElement('img');
-img.setAttribute("class","chat-image");
-img.setAttribute("src",msg.image)
+var br=document.createElement('br');
+
+
+img.setAttribute("src",msg.image);
+div.append(img);
+console.log(div);
 document.getElementById('message-container').append(img);
+document.getElementById('message-container').append(br);
+console.log(document.getElementById('message-container'));
+if (msg.username!=username){
+   img.setAttribute("class","img_receiver");
+ }
+ else
+ {
+   img.setAttribute("class","Img_message");
+   
+ }
+
 check_windowheight();
 
 })
