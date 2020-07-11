@@ -312,18 +312,25 @@ border-bottom: 1px solid white;
 }
 .img_receiver{
     height: 150px;
-    width:auto;
+    width:inherit;
     cursor: pointer;
     float: left;
+    margin-top: 5px;
 }
 .Img_message{
     float: right;
     height: 150px;
-    width:auto;
+    width:inherit;
     cursor: pointer;
+    margin-top: 5px;
+
 }
 
-
+.img_container{
+    height: 150px;
+  
+    width: inherit;
+}
 .message span{
     font-size: 7px;
     float: right;
@@ -352,4 +359,10 @@ input[type="file"]{
     height: 50px;
     width:50px;
     cursor: pointer;
+}
+.printSysMsg{
+    text-align: center;
+    font-size: 7px;
+    font-family: 'Montserrat', sans-serif;
+    font-style: italic;
 }

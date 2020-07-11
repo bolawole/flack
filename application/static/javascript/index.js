@@ -10,6 +10,7 @@ var socket=io.connect(location.protocol + '//' + document.domain + ':' + locatio
 var room;
 var scrollwindow=document.getElementById("upperchat-layer");
 var infile=document.getElementById("infile");
+var chat_msg=document.getElementById("message-input");
 //localStorage.removeItem("channellist");
 window.onpopstate=e=>{
    try {
@@ -79,25 +80,30 @@ if(channel_list!=undefined)
 }
 
 document.getElementById("send-button").onclick=()=>{
-const message=document.getElementById("message-input").value;
+const message=chat_msg.value;
 socket.send({'msg': message,'username':username,'room':room});
 }
 socket.on('join',data=>{
-   document.getElementById("userstatus").innerHTML=`<p>${data.msg}</p>`
-   
+   // document.getElementById("userstatus").innerHTML=`<p>${data.msg}</p>`
+   printSysMsg(data.msg)
    
 })
 socket.on('message',data=>{
-   document.getElementById("message-input").value="";
+   console.log(document.getElementById('message-container'));
+   chat_msg.value="";
   var p= document.createElement('p');
-//   p.setAttribute("class","message");
+
   var br=document.createElement('br');
   var span_username=document.createElement('span');
   span_username.setAttribute("id","span_username");
   var span_timestamp=document.createElement('span');
   if (typeof data.timestamp === 'undefined' || typeof data.username==='undefined')
-  { p.innerHTML=data.msg+br.outerHTML;
-   document.querySelectorAll(".message").append(p);}
+  { 
+     printSysMsg(data.msg);
+   
+   // p.innerHTML=data.msg+br.outerHTML;
+   // document.querySelectorAll(".message").append(p);
+ }
   else{
   span_username.innerHTML=" " +data.username;
   span_timestamp.innerHTML=" " +data.timestamp;
@@ -110,17 +116,28 @@ socket.on('message',data=>{
    p.setAttribute("class","message");
  }
 
-
-  //   if(data.username===username){
-//      document.querySelector(".message").style.backgroundColor="white";
-//   }
-//   document.querySelector(".message").style.backgroundColor="red";
   document.getElementById("message-container").append(p); 
- check_windowheight();
-   
-   
+ check_windowheight(); 
    
   }
+})
+socket.on('image',msg=>{
+   var p= document.createElement('p');
+   var br=document.createElement('br');
+
+   p.setAttribute("class","img_container");
+if (msg.username!=username){
+ 
+   p.innerHTML=`<img src="${msg.image}" class="img_receiver">`;
+ }
+ else
+ {
+   p.innerHTML=`<img src="${msg.image}" class="Img_message">`;
+ }
+
+document.getElementById('message-container').append(p);
+check_windowheight();
+
 })
 
 document.querySelectorAll('.nav-link').forEach(p=>{
@@ -154,13 +171,14 @@ socket.emit('leave',{'username': username,'room':room});
 //join room
 function joinRoom(room){
 socket.emit('join',{'username':username,'room':room});
-// document.getElementById('message-container').innerHTML="";
+chat_msg.focus();
 scrollwindow.style.overflow="hidden";
 }
 
 //print system message
 function  printSysMsg(msg){
 const p=document.createElement('p');
+p.setAttribute("class","printSysMsg")
 p.innerHTML=msg;
 document.getElementById('message-container').append(p);
 }
@@ -205,30 +223,7 @@ if (file){
 }
 })
 
-socket.on('image',msg=>{
-var div=document.createElement('div');
-var img=document.createElement('img');
-var br=document.createElement('br');
 
-
-img.setAttribute("src",msg.image);
-div.append(img);
-console.log(div);
-document.getElementById('message-container').append(img);
-document.getElementById('message-container').append(br);
-console.log(document.getElementById('message-container'));
-if (msg.username!=username){
-   img.setAttribute("class","img_receiver");
- }
- else
- {
-   img.setAttribute("class","Img_message");
-   
- }
-
-check_windowheight();
-
-})
 
 function check_windowheight(){
    if((scrollwindow.scrollHeight) > (scrollwindow.clientHeight))
@@ -239,13 +234,17 @@ function check_windowheight(){
    else
    scrollwindow.style.overflow="hidden";
    scrollwindow.style.overflowX ="hidden";
-   
-   
-   
-      console.log(scrollwindow.clientHeight);
-      console.log(scrollwindow.scrollHeight);
-      console.log(Math.floor(scrollwindow.scrollTop));
+      // console.log(scrollwindow.clientHeight);
+      // console.log(scrollwindow.scrollHeight);
+      // console.log(Math.floor(scrollwindow.scrollTop));
 }
+
+chat_msg.addEventListener("keyup",event =>{
+   event.preventDefault();
+   if(event.keyCode===13){
+      document.getElementById("send-button").click();
+   }
+})
 
  });
 
