@@ -27,6 +27,7 @@ catch(err){
 }
 triangle.addEventListener('click',function(){
 triangle.classList.toggle("change");
+document.querySelector("#channel-list").classList.toggle("channel-dropdown");
 })
 
 
@@ -52,11 +53,8 @@ document.getElementById("new-channel").onsubmit = ()=>{
    a.innerHTML=document.getElementById("channel-name").value;
    li.appendChild(a);
    arr_of_channellist.push(li.innerHTML);
-   console.log(arr_of_channellist);
    document.getElementById("channel-list").append(li)
    localStorage.setItem('channellist',(JSON.stringify(arr_of_channellist)));
-   console.log(localStorage.setItem('channellist',(JSON.stringify(arr_of_channellist)))
-   )
    document.getElementById("channel-name").value='';
    localStorage.setItem('channellist',(JSON.stringify(arr_of_channellist)));
 
@@ -89,7 +87,6 @@ socket.on('join',data=>{
    
 })
 socket.on('message',data=>{
-   console.log(document.getElementById('message-container'));
    chat_msg.value="";
   var p= document.createElement('p');
 
@@ -155,7 +152,6 @@ p.onclick=()=>{
       leaveRoom(room);
       joinRoom(newRoom);
       room=newRoom;
-      console.log(p.innerHTML);
       document.getElementById("chat-tag").innerHTML=titleCase(p.innerHTML);
    }
 }
@@ -191,7 +187,6 @@ document.getElementById('message-container').append(p);
  function loadpage(name){
    const request=new XMLHttpRequest();
    const state =`/active/${username}/${name}`;
-   console.log(state);
    request.open('GET',`/active/${username}/${name}`);
    request.onload=()=>{
       const response=request.responseText;
@@ -234,9 +229,9 @@ function check_windowheight(){
    else
    scrollwindow.style.overflow="hidden";
    scrollwindow.style.overflowX ="hidden";
-      // console.log(scrollwindow.clientHeight);
-      // console.log(scrollwindow.scrollHeight);
-      // console.log(Math.floor(scrollwindow.scrollTop));
+      console.log(scrollwindow.clientHeight);
+      console.log(scrollwindow.scrollHeight);
+      console.log(Math.floor(scrollwindow.scrollTop));
 }
 
 chat_msg.addEventListener("keyup",event =>{
