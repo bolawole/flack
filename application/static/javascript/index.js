@@ -86,6 +86,7 @@ socket.on('join',data=>{
    printSysMsg(data.msg)
    
 })
+// this part gets the message from the server and displays it 
 socket.on('message',data=>{
    chat_msg.value="";
   var p= document.createElement('p');
@@ -115,9 +116,11 @@ socket.on('message',data=>{
 
   document.getElementById("message-container").append(p); 
  check_windowheight(); 
+ update_scroll();
    
   }
 })
+// gets the images from the server and displays it
 socket.on('image',msg=>{
    var p= document.createElement('p');
    var br=document.createElement('br');
@@ -134,6 +137,7 @@ if (msg.username!=username){
 
 document.getElementById('message-container').append(p);
 check_windowheight();
+update_scroll();
 
 })
 
@@ -233,13 +237,20 @@ function check_windowheight(){
       console.log(scrollwindow.scrollHeight);
       console.log(Math.floor(scrollwindow.scrollTop));
 }
-
+function update_scroll(){
+   scrollwindow.scrollTop=scrollwindow.scrollHeight;
+}
 chat_msg.addEventListener("keyup",event =>{
    event.preventDefault();
    if(event.keyCode===13){
       document.getElementById("send-button").click();
    }
 })
+scrollwindow.onscroll=()=>{
+   console.log(scrollwindow.clientHeight);
+   console.log(scrollwindow.scrollHeight);
+   console.log(Math.floor(scrollwindow.scrollTop));
+}
 
  });
 
